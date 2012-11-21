@@ -144,5 +144,13 @@ describe('webremix', function() {
           '<img src="http://instagr.am/p/QFJJzTw8yS/media/"/></a></div> bunnies');
       });
     });
+
+    it('returns escaped text and links', function() {
+      var mix = '<script>alert("omg");</script> http://instagram.com/p/QFJJzTw8yS/ bunnies';
+      webRemix.generate(mix, function(err, subject) {
+        subject.should.equal('&lt;script&gt;alert("omg");&lt;/script&gt; <div class="image-wrapper"><a href="http://instagram.com/p/QFJJzTw8yS/">' +
+          '<img src="http://instagr.am/p/QFJJzTw8yS/media/"/></a></div> bunnies');
+      });
+    });
   });
 });
