@@ -20,6 +20,19 @@ Output becomes:
 
     <img src="http://amazinggifs.com/cats.gif"> look at these amazing cats!
 
+## Video size options
+
+If you want to pass in a different width and height for Youtube/Vimeo/Rdio, pass in the following:
+
+    var options = {
+        width: 500,
+        height: 200
+    };
+
+    remix.generate('https://www.youtube.com/watch?v=XYc6ZiV07ZE', options, function(err, resp) {
+        console.log(resp);
+    });
+
 ## Supported media
 
 * Regular links (http://whatever.org or whatever.org)
