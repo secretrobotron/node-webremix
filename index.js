@@ -2,39 +2,36 @@
 
 var remix = require('./lib/remix');
 
-exports.generate = function(content, options, callback) {
-  var contentArr = content.split(/\s/);
-  var finalContent = [];
+function Generator(options) {
 
-  if (!callback) {
-    callback = options;
-    options = {};
-  }
+  options = options || {};
 
-  contentArr.forEach(function(content, idx) {
-    process.nextTick(function() {
+  this.generate = function(content, options, callback) {
+    var contentArr = content.split(/\s/);
+    var finalContent = [];
+
+    if (!callback) {
+      callback = options;
+      options = {};
+    }
+
+    var responses = 0;
+    contentArr.forEach(function(content, idx) {
       remix.process(content, options, function(err, resp) {
         if (err) {
           callback(err);
-
         } else {
-          finalContent.push({ id: idx, message: resp });
+          finalContent[idx] = resp;
         }
-
-        if (finalContent.length === contentArr.length) {
-          var messageArr = [];
-
-          finalContent = finalContent.sort(function(a, b) {
-            return parseInt(a.id, 10) - parseInt(b.id, 10);
-          });
-
-          finalContent.forEach(function(m) {
-            messageArr.push(m.message);
-          });
-
-          callback(null, messageArr.join(' '));
+        if (++responses === contentArr.length) {
+          callback(null, finalContent.join(' '));
         }
       });
     });
-  });
-};
+  };
+
+}
+
+var defaultGenerator = new Generator();
+
+exports.generate = defaultGenerator.generate;
